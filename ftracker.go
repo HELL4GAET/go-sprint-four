@@ -30,7 +30,7 @@ func distance(action int) float64 {
 // action int — количество совершенных действий(число шагов при ходьбе и беге, либо гребков при плавании).
 // duration float64 — длительность тренировки в часах.
 func meanSpeed(action int, duration float64) float64 {
-	if duration == 0 {
+	if duration <= 0 {
 		return 0
 	}
 	distance := distance(action)
@@ -110,7 +110,7 @@ func WalkingSpentCalories(action int, duration, weight, height float64) float64 
 		return 0
 	}
 	speed := meanSpeed(action, duration) * kmhInMsec
-	res := ((walkingCaloriesWeightMultiplier*weight + (math.Pow(speed/height, 2)/height)*walkingSpeedHeightMultiplier*weight) * duration * minInH)
+	res := ((walkingCaloriesWeightMultiplier*weight + (math.Pow(speed, 2)/height)*walkingSpeedHeightMultiplier*weight) * duration * minInH)
 	return res
 
 }
