@@ -82,8 +82,13 @@ const (
 // duration float64 — длительность тренировки в часах.
 func RunningSpentCalories(action int, weight, duration float64) float64 {
 	// ваш код здесь
-	res := ((runningCaloriesMeanSpeedMultiplier * meanSpeed(action, duration) * runningCaloriesMeanSpeedShift) * weight / mInKm * duration * minInH)
+	if weight <= 0 || duration <= 0 {
+		return 0
+	}
+	speed := meanSpeed(action, duration)
+	res := ((runningCaloriesMeanSpeedMultiplier * speed * runningCaloriesMeanSpeedShift) * weight / mInKm * duration * minInH)
 	return res
+
 }
 
 // Константы для расчета калорий, расходуемых при ходьбе.
@@ -101,11 +106,12 @@ const (
 // weight float64 — вес пользователя.
 // height float64 — рост пользователя.
 func WalkingSpentCalories(action int, duration, weight, height float64) float64 {
-	res := ((walkingCaloriesWeightMultiplier*weight + (math.Pow(meanSpeed(action, duration)*kmhInMsec, 2)/height)*walkingSpeedHeightMultiplier*weight) * duration * minInH)
+	if weight <= 0 || height <= 0 || duration <= 0 {
+		return 0
+	}
+	speed := meanSpeed(action, duration) * kmhInMsec
+	res := ((walkingCaloriesWeightMultiplier*weight + (math.Pow(speed/height, 2)/height)*walkingSpeedHeightMultiplier*weight) * duration * minInH)
 	return res
-
-	// ((0.035 * ВесСпортсменаВКг + (СредняяСкоростьВМетрахВСекунду**2 / РостВМетрах)
-	// * 0.029 * ВесСпортсменаВКг) * ВремяТренировкиВЧасах * minInH)
 
 }
 
